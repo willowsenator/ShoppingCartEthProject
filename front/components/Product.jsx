@@ -18,27 +18,29 @@ export function Product(){
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <td>{data[0].product_id}</td>
+                    </tr>
+                    <tr>
                         <th>NAME</th>
+                        <td>{data[0].product_name}</td>
+                    </tr>
+                    <tr>
                         <th>QUANTITY_PER_UNIT</th>
+                        <td>{data[0].quantity_per_unit}</td>
+                    </tr>
+                    <tr>
                         <th>UNIT_PRICE</th>
+                        <td>{data[0].unit_price}</td>
+                    </tr>
+                    <tr>    
                         <th>UNITS_IN_STOCK</th>
+                        <td>{data[0].units_in_stock}</td>
+                    </tr>
+                    <tr>
                         <th>DISCONTINUED</th>
+                        <td>{data[0].discontinued == 1 ? 'YES' : 'NO'}</td>
                     </tr>
                 </thead>
-                <tbody>
-                    {
-                        data.map(product=> (
-                            <tr>
-                                <td>{product.product_id}</td>
-                                <td>{product.product_name}</td>
-                                <td>{product.quantity_per_unit}</td>
-                                <td>{product.unit_price}</td>
-                                <td>{product.units_in_stock}</td>
-                                <td>{product.discontinued == 1 ? 'YES' : 'NO'}</td>
-                            </tr>
-                        ))
-                    }
-                </tbody>
             </table>
         </div>);
     }
