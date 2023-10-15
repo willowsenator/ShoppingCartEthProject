@@ -6,10 +6,11 @@ import {Home} from '../components/Home.jsx';
 import {Product} from '../components/Product.jsx';
 import { createContext, useState } from 'react';
 
+export const Context = createContext(null);
+
 export function App(){
 
     const client = new QueryClient();
-    const Context = createContext(null);
     const [status, setStatus] = useState({cart: []});
 
     return (
