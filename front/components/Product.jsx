@@ -1,13 +1,38 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import {useQuery} from "react-query";
+import {useForm} from 'react-hook-form';
+import {Context} from "../src/App.jsx";
 
 export function Product(){
-    let params = useParams();
+    const params = useParams();
+
     const {data, isLoading} = useQuery(`product_${params.id}`, async()=>{
         const res = await fetch(`http://127.0.0.1:9800/product/${params.id}`, { method: "GET" });
         return await res.json();
     });
+    const [status, setStatus] = useContext(Context);
+    const quantity = status.cart.find(item => item.product.product_id == params.id)?.quantity;
+
+    const {register, handleSubmit} = useForm(
+        {
+            defaultValues: {
+                quantity: quantity
+            }
+        }
+    );
+
+    function onSubmit(dataForm){
+        setStatus({
+            ...status,
+            cart: [...status.cart.filter(item => item.product.product_id != params.id),
+            {
+                product: data[0],
+                quantity: dataForm.quantity,
+                total: dataForm.quantity * data[0].unit_price
+            }]
+        });
+    }
 
     if(isLoading){
         return (<div><h1>Loading...</h1></div>);
@@ -42,6 +67,16 @@ export function Product(){
                     </tr>
                 </thead>
             </table>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="form-group">
+                    <label htmlFor="product_quantity">
+                       Type a quantity
+                    </label>
+                    <input {...register("quantity")} id="product_quantity" type="number" className="form-control" />
+                </div>
+                <button type="submit" className="btn btn-primary mt-3">Add to cart</button>
+            </form>
+	    <div>{JSON.stringify(status)}</div>	
         </div>);
     }
 }
