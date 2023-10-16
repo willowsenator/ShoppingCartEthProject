@@ -22,15 +22,15 @@ export function Cart() {
         });
     },[]);
 
-    function pay(){
+    async function pay(){
         const txParams = {
-            to: "",
+            to: "0x115A8a1Afa5d9958777E9d93e84ED80eb22998f0",
             from: account,
             value: ethers.toBeHex(ethers.parseEther(cartTotalPrice.toString()))
         };
 
         try {
-            const tx = window.ethereum.request({
+            const tx = await window.ethereum.request({
                 method: "eth_sendTransaction",
                 params: [txParams]
             });
@@ -69,6 +69,6 @@ export function Cart() {
         <h4>Account: {account}</h4>
         <button onClick={()=>pay()} className="btn btn-primary">Pay</button>
         {txOk && <div className="alert alert-success">{txOk}</div>}
-        {txKo && <div className="alert alert-danger">{txKo}</div>}
+        {txKo && <div className="alert alert-danger">{JSON.stringify(txKo)}</div>}
     </div>);
 }
