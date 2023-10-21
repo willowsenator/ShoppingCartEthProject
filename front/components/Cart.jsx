@@ -23,22 +23,32 @@ export function Cart() {
     },[]);
 
     async function pay(){
-        const txParams = {
-            to: "0x115A8a1Afa5d9958777E9d93e84ED80eb22998f0",
-            from: account,
-            value: ethers.toBeHex(ethers.parseEther(cartTotalPrice.toString()))
-        };
+       initTxMessages();
+       if(cartTotalPrice > 0){ 
+            const txParams = {
+                to: "0x115A8a1Afa5d9958777E9d93e84ED80eb22998f0",
+                from: account,
+                value: ethers.toBeHex(ethers.parseEther(cartTotalPrice.toString()))
+            };
 
-        try {
-            const tx = await window.ethereum.request({
-                method: "eth_sendTransaction",
-                params: [txParams]
-            });
+            try {
+                const tx = await window.ethereum.request({
+                    method: "eth_sendTransaction",
+                    params: [txParams]
+                });
 
-            setTxOk(tx);
-        } catch (error) {
-            setTxKo(error);
+                setTxOk(tx);
+            } catch (error) {
+                setTxKo(error);
+            }
+        } else {
+            setTxKo("The cartTotalPrice is 0. You must select some products to pay!!!");
         }
+    }
+
+    function initTxMessages(){
+        setTxKo(null);
+        setTxOk(null);
     }
 
     return (<div>

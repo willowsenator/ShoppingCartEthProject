@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import {useQuery} from "react-query";
 import {useForm} from 'react-hook-form';
@@ -13,7 +13,7 @@ export function Product(){
     });
     const [status, setStatus] = useContext(Context);
     const quantity = status.cart.find(item => item.product.product_id == params.id)?.quantity;
-
+    const [productAddedToCartOk, setProductAddedToCartOk] = useState(null);
     const {register, handleSubmit} = useForm(
         {
             defaultValues: {
@@ -23,6 +23,7 @@ export function Product(){
     );
 
     function onSubmit(dataForm){
+        setProductAddedToCartOk("Added product to Cart");
         setStatus({
             ...status,
             cart: [...status.cart.filter(item => item.product.product_id != params.id),
@@ -76,7 +77,7 @@ export function Product(){
                 </div>
                 <button type="submit" className="btn btn-primary mt-3">Add to cart</button>
             </form>
-	    <div>{JSON.stringify(status)}</div>	
+            {productAddedToCartOk && <div className="alert alert-success">{productAddedToCartOk}</div>}
         </div>);
     }
 }
