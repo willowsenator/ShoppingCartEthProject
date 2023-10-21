@@ -14,6 +14,7 @@ export function Product(){
     const [status, setStatus] = useContext(Context);
     const quantity = status.cart.find(item => item.product.product_id == params.id)?.quantity;
     const [productAddedToCartOk, setProductAddedToCartOk] = useState(null);
+    const [productAddedToCartKo, setProductAddedToCartKo] = useState(null);
     const {register, handleSubmit} = useForm(
         {
             defaultValues: {
@@ -23,16 +24,26 @@ export function Product(){
     );
 
     function onSubmit(dataForm){
-        setProductAddedToCartOk("Added product to Cart");
-        setStatus({
-            ...status,
-            cart: [...status.cart.filter(item => item.product.product_id != params.id),
-            {
-                product: data[0],
-                quantity: dataForm.quantity,
-                total: dataForm.quantity * data[0].unit_price
-            }]
-        });
+        initProductCartMessages();
+        if(dataForm.quantity > 0){
+	    setProductAddedToCartOk("Product added to Cart");
+            setStatus({
+	         ...status,
+                  cart: [...status.cart.filter(item => item.product.product_id != params.id),
+                  {
+                	product: data[0],
+		                quantity: dataForm.quantity,
+           	        	total: dataForm.quantity * data[0].unit_price
+                  }]
+	        });
+	} else {
+		setProductAddedToCartKo("You must add a quantity greater than 0");
+	}
+    }
+
+    function initProductCartMessages() {
+       setProductAddedToCartOk(null);
+       setProductAddedToCartKo(null);
     }
 
     if(isLoading){
@@ -78,6 +89,7 @@ export function Product(){
                 <button type="submit" className="btn btn-primary mt-3">Add to cart</button>
             </form>
             {productAddedToCartOk && <div className="alert alert-success">{productAddedToCartOk}</div>}
+            {productAddedToCartKo && <div className="alert alert-danger">{productAddedToCartKo}</div>}  
         </div>);
     }
 }
