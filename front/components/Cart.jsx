@@ -38,12 +38,17 @@ export function Cart() {
                 });
 
                 setTxOk(tx);
+                deleteCart();
             } catch (error) {
                 setTxKo(error);
             }
         } else {
-            setTxKo("The cartTotalPrice is 0. You must select some products to pay!!!");
+            setTxKo("The total to pay is 0. You must select some products to pay!!!");
         }
+    }
+
+    function deleteCart(){
+      setStatus({cart: []});
     }
 
     function initTxMessages(){
